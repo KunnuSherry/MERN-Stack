@@ -45,7 +45,6 @@ export const getCompany = async(req, res)=>{
             companies,
             success:true
         })
-
     } catch (error) {
         console.log(error);
         
