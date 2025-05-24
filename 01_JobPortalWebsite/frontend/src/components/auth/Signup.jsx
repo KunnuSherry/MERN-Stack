@@ -3,35 +3,39 @@ import Navbar from '../shared/Navbar'
 import { Label } from '../ui/label.jsx'
 import { Input } from '../ui/input.jsx'
 import { RadioGroupItem, RadioGroup } from '../ui/radio-group.jsx'
-import {Button} from '../ui/button.jsx'
+import { Button } from '../ui/button.jsx'
 import { Link, useNavigate } from 'react-router-dom'
 import { USER_API_ENDPOINT } from '../../utils/constant.js'
 import { toast } from 'sonner'
 import axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux'
+import { setLoading } from '../../redux/authSlice.js'
 
 const Signup = () => {
 
+    const {loading} = useSelector(store=>store.auth)
+    const dispatch = useDispatch()
     const navigate = useNavigate();
 
     const [input, setInput] = useState({
-        fullname:"",
-        email:"",
-        phoneNumber:"",
-        role:"",
-        password:"",
-        file:""
+        fullname: "",
+        email: "",
+        phoneNumber: "",
+        role: "",
+        password: "",
+        file: ""
 
     })
 
-    const changeEventHandler = (e) =>{
-        setInput({...input, [e.target.name]:e.target.value})
+    const changeEventHandler = (e) => {
+        setInput({ ...input, [e.target.name]: e.target.value })
     }
 
-    const changeFileHandler = (e) =>{
-        setInput({...input, file:e.target.files?.[0]})
+    const changeFileHandler = (e) => {
+        setInput({ ...input, file: e.target.files?.[0] })
     }
 
-    const submitHandler = async(e) =>{
+    const submitHandler = async (e) => {
         e.preventDefault();
         const formData = new FormData();
         formData.append("fullname", input.fullname);
@@ -39,29 +43,32 @@ const Signup = () => {
         formData.append("phoneNumber", input.phoneNumber);
         formData.append("role", input.role);
         formData.append("password", input.password);
-        if(input.file){
+        if (input.file) {
             formData.append("file", input.file);
         }
-        try{
+        try {
+            dispatch(setLoading(true));
             const res = await axios.post(`${USER_API_ENDPOINT}/register`, formData, {
-                headers:{
+                headers: {
                     "Content-Type": "multipart/form-data"
                 },
                 withCredentials: true
             });
-            if(res.data.success){
+            if (res.data.success) {
                 toast.success(res.data.message);
                 navigate("/login")
             }
-            else{
+            else {
                 toast.error(res.data.message)
             }
-            
-        } catch(error){
+
+        } catch (error) {
             console.log(error);
             toast.error(error.response.data.message)
-            
-        }      
+
+        } finally{
+            dispatch(setLoading(false))
+        }
     }
 
     return (
@@ -72,7 +79,7 @@ const Signup = () => {
                     <h1 className='font-bold text-3xl mb-5'>Sign Up</h1>
                     <div className='flex flex-col gap-2'>
                         <Label htmlFor="fullname">Full Name</Label>
-                        <Input 
+                        <Input
                             id="fullname"
                             type="text"
                             placeholder="Enter your full name"
@@ -118,22 +125,22 @@ const Signup = () => {
                     <div className='flex flex-col gap-2 items-center'>
                         <RadioGroup defaultValue="option-one" className="flex items-center gap-4">
                             <div className="flex items-center space-x-2">
-                                <Input  
+                                <Input
                                     type="radio"
                                     name="role"
                                     value="Student"
-                                    checked={input.role==='Student'}
+                                    checked={input.role === 'Student'}
                                     onChange={changeEventHandler}
                                     className="cursor-pointer"
                                 />
                                 <Label htmlFor="option-one">Student</Label>
                             </div>
                             <div className="flex items-center space-x-2">
-                                <Input  
+                                <Input
                                     type="radio"
                                     name="role"
                                     value="Recruiter"
-                                    checked={input.role==='Recruiter'}
+                                    checked={input.role === 'Recruiter'}
                                     onChange={changeEventHandler}
                                     className="cursor-pointer"
                                 />
@@ -141,19 +148,23 @@ const Signup = () => {
                             </div>
                         </RadioGroup>
                     </div>
-                        <div className='flex gap-2 flex-col'>
-                            <Label htmlFor="profile">Profile</Label>
-                            <Input 
-                                id="profile"
-                                accept="image/*"
-                                type="file"
-                                onChange={changeFileHandler}
-                                className="cursor-pointer w-50"
-                            />
-                        </div>
-                        <Button type="submit" className="bg-[#6a39c2] hover:bg-[#342849] text-white w-full" >Signup</Button>
-                        <span>Already have an account? <Link to="/login" className="text-blue-400" >Login</Link></span>
-                    
+                    <div className='flex gap-2 flex-col'>
+                        <Label htmlFor="profile">Profile</Label>
+                        <Input
+                            id="profile"
+                            accept="image/*"
+                            type="file"
+                            onChange={changeFileHandler}
+                            className="cursor-pointer w-50"
+                        />
+                    </div>
+                    {
+                        loading ? <Button className="w-full my-4"> <Loader2 className='mr-2 h-4 w-4 animate-spin' /></Button> :
+                            <Button type="submit" className="bg-[#6a39c2] hover:bg-[#342849] text-white w-full" >Signup</Button>
+
+                    }
+                    <span>Already have an account? <Link to="/login" className="text-blue-400" >Login</Link></span>
+
                 </form>
             </div>
 
