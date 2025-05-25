@@ -19,7 +19,7 @@ const Categories = () => {
                         category.map((category, ind) => (
 
                             <CarouselItem className="md:basis-1/2 lg-basis-1/3 !mx-0">
-                                <Button variant="outline" className="rounded-full">{category}</Button>
+                                <Button variant="outline" className="rounded-full hover:cursor-pointer">{category}</Button>
                             </CarouselItem>
                         ))
                     }
