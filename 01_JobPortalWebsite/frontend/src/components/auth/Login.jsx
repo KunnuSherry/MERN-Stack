@@ -10,7 +10,7 @@ import { toast } from 'sonner'
 import { USER_API_ENDPOINT } from '../../utils/constant.js'
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux'
-import { setLoading } from '../../redux/authSlice.js'
+import { setLoading, setUser } from '../../redux/authSlice.js'
 import { Loader2 } from 'lucide-react'
 
 
@@ -40,6 +40,7 @@ const Login = () => {
                     withCredentials: true
                 })
                 if(res.data.success){
+                    dispatch(setUser(res.data.user))
                     toast.success(res.data.message);
                     navigate("/")
                 }
@@ -47,7 +48,7 @@ const Login = () => {
                     toast.error(res.data.message)
                 }
             } catch (error) {
-                toast.error(error)
+                toast.error(error.message || 'Something went wrong')
                 
             }  finally{
                 dispatch(setLoading(false));
