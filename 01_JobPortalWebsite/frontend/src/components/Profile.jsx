@@ -5,6 +5,7 @@ import { Button } from './ui/button';
 import { Pen, Mail, Contact } from 'lucide-react';
 import { Badge } from './ui/badge';
 import { Label } from './ui/label';
+import AppliedJobsTable from './profile/AppliedJobsTable';
 
 const Profile = () => {
     const skills = ['html', 'css', 'js']
@@ -12,7 +13,7 @@ const Profile = () => {
     return (
         <div>
             <Navbar />
-            <div className='max-w-7xl mx-auto bg-white border border-gray-200 rounded-2xl my-5 p-5'>
+            <div className='max-w-4xl mx-auto bg-white border border-gray-200 rounded-2xl my-5 p-5'>
                 <div className='flex justify-between items-center'>
                     {/* Left side: Avatar + Name + Description */}
                     <div className='flex items-center gap-4'>
@@ -36,7 +37,7 @@ const Profile = () => {
                         <span>patel@gmail.com</span>
                     </div>
                     <div className='flex items-center gap-3'>
-                        <Contact/>
+                        <Contact />
                         <span>9910974301</span>
                     </div>
                 </div>
@@ -44,7 +45,7 @@ const Profile = () => {
                     <h1>Skills</h1>
                     <div className='flex items-center gap-3 my-5'>
                         {
-                            skills.length!=0 ? skills.map((item, index)=><Badge className="rounded-full bg-black text-white" key={index}>{item}</Badge>) : (<h1>NA</h1>)
+                            skills.length != 0 ? skills.map((item, index) => <Badge className="rounded-full bg-black text-white" key={index}>{item}</Badge>) : (<h1>NA</h1>)
                         }
                     </div>
                 </div>
@@ -54,10 +55,12 @@ const Profile = () => {
                         isResume ? <a className='text-blue-500 w-full hover:underline' href="https://youtube.com/kunnusherry" target='blank'>KunnuSherry</a> : (<h1>NA</h1>)
                     }
                 </div>
-                <div className='max-w-4xl mx-auto bg-white rounded-2xl'>
-                    <h1>Applied Jobs</h1>
-                    {/* Application Table */}
-                </div>
+
+            </div>
+            <div className='max-w-4xl mx-auto bg-white rounded-2xl'>
+                <h1 className='font-bold text-lg my-5'>Applied Jobs</h1>
+                {/* Application Table */}
+                <AppliedJobsTable />
             </div>
         </div>
     );
