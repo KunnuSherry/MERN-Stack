@@ -106,6 +106,8 @@ export const updateProfile = async(req,res)=>{
     try{
         const {fullname, email, phoneNumber, bio, skills} = req.body;
         const file = req.file
+        console.log(req.body)
+        console.log(req.file)
         
         const userId = req.id; //middleware authentication
         let user = await User.findById(userId);

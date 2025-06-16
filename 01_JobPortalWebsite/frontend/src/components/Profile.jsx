@@ -7,14 +7,16 @@ import { Badge } from './ui/badge';
 import { Label } from './ui/label';
 import AppliedJobsTable from './profile/AppliedJobsTable';
 import UpdateProfileDialog from './UpdateProfileDialog';
+import { useSelector } from 'react-redux';
 
-
-    const skills = ['html', 'css', 'js']
-    const isResume = true;
-
+const isResume = true;
+const skills = []
 const Profile = () => {
-
+    const {user} = useSelector(store=>store.auth)
     const[open,setOpen] = useState(false);
+
+    if (!user) return null; // or a loader
+
     return (
         <div>
             <Navbar />
@@ -26,8 +28,8 @@ const Profile = () => {
                             <AvatarImage src="https://png.pngtree.com/png-vector/20190304/ourmid/pngtree-growth-business-company-logo-png-image_728232.jpg" />
                         </Avatar>
                         <div>
-                            <h1 className='font-medium text-xl'>Full Name</h1>
-                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorum, odio?</p>
+                            <h1 className='font-medium text-xl'>{user.fullname}</h1>
+                            <p>{user.profile.bio}</p>
                         </div>
                     </div>
 
@@ -39,18 +41,18 @@ const Profile = () => {
                 <div className='my-5'>
                     <div className='flex items-center gap-3'>
                         <Mail />
-                        <span>patel@gmail.com</span>
+                        <span>{user.email}</span>
                     </div>
                     <div className='flex items-center gap-3'>
                         <Contact />
-                        <span>9910974301</span>
+                        <span>{user.phoneNumber}</span>
                     </div>
                 </div>
                 <div>
                     <h1>Skills</h1>
                     <div className='flex items-center gap-3 my-5'>
                         {
-                            skills.length != 0 ? skills.map((item, index) => <Badge className="rounded-full bg-black text-white" key={index}>{item}</Badge>) : (<h1>NA</h1>)
+                            user.profile.skills.length != 0 ? user.profile.skills.map((item, index) => <Badge className="rounded-full bg-black text-white" key={index}>{item}</Badge>) : (<h1>NA</h1>)
                         }
                     </div>
                 </div>
