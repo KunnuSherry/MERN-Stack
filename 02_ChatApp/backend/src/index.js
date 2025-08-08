@@ -4,6 +4,8 @@ import authRoutes from "./routes/auth.route.js"
 import messageRoutes from "./routes/message.route.js"
 import { connectDB } from "./utils/db.js"
 import cookieParser from "cookie-parser"
+import cors from "cors"
+
 dotenv.config()
 
 const app = express();
@@ -14,10 +16,15 @@ app.use(cookieParser())
 app.use(express.urlencoded({ extended: true }));
 app.use(cors(
     {
-        origin: "http://localhost:5173/",
+        origin: "http://localhost:5173",
         credentials: true, // Allow cookies to be sent with requests
     }
 ))
+
+app.get('/', (req, res) => {
+    res.json({ message: "Hi There you landed right !" });
+});
+
 
 app.use("/api/auth", authRoutes)
 app.use("/api/message", messageRoutes)
