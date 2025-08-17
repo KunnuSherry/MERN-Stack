@@ -78,15 +78,27 @@ export const updateProfile=async(req,res)=>{
     try {
         const {profilePic} = req.body;
         const userId = req.user._id;
+        
         if(!profilePic){
             return res.status(400).json({message:"Profile Pic Needed !"})
         }
+
+        // Check if profilePic is a valid base64 string
+        if (!profilePic.startsWith('data:image/')) {
+            return res.status(400).json({message:"Invalid image format"})
+        }
+
         const uploadedProfilePic = await cloudinary.uploader.upload(profilePic);
-        const updatedUser = await User.findOneAndUpdate(userId, {profilePic:uploadedProfilePic.secure_url}, {new:true})
+        const updatedUser = await User.findByIdAndUpdate(userId, {profilePic:uploadedProfilePic.secure_url}, {new:true})
+
+        if (!updatedUser) {
+            return res.status(404).json({message:"User not found"})
+        }
 
         res.status(200).json(updatedUser)
     } catch (error) {
-        return res.status(500).json({message:"Profile Pic Needed !"})
+        console.error("Error updating profile:", error);
+        return res.status(500).json({message:"Failed to update profile. Please try again."})
     }
 }
 
