@@ -5,10 +5,10 @@ import messageRoutes from "./routes/message.route.js"
 import { connectDB } from "./utils/db.js"
 import cookieParser from "cookie-parser"
 import cors from "cors"
+import {app, server} from "./utils/socket.js"
 
 dotenv.config()
 
-const app = express();
 const PORT = process.env.PORT
 
 // Increase body parser limits for image uploads
@@ -28,9 +28,9 @@ app.get('/', (req, res) => {
 
 
 app.use("/api/auth", authRoutes)
-app.use("/api/message", messageRoutes)
+app.use("/api/messages", messageRoutes)
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
     connectDB();
     console.log(`Server is running on port ${PORT}`);
 
