@@ -5,7 +5,7 @@ import messageRoutes from "./routes/message.route.js";
 import { connectDB } from "./utils/db.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import { app as socketApp, server } from "./utils/socket.js";
+import { app, server } from "./utils/socket.js";
 import path from "path";
 import { fileURLToPath } from "url";
 
@@ -25,15 +25,11 @@ app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 app.use(cookieParser());
 app.use(
   cors({
-    origin:
-      process.env.NODE_ENV === "production"
-        ? process.env.FRONTEND_URL
-        : "http://localhost:5173",
-    credentials: true,
+    origin:"*",
   })
 );
 
-app.get("/", (req, res) => {
+app.use("/", (req, res) => {
   res.json({ message: "Hi There you landed right !" });
 });
 
